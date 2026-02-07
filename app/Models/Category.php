@@ -9,6 +9,11 @@ class Category extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'family_id',
+    ];
+
     // Relacion muchos a uno
     public function family()
     {

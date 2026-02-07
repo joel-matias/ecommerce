@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Feature extends Model
 {
+    protected $fillable = [
+        'value',
+        'description',
+        'option_id',
+    ];
+
     // Relacion uno a muchos inversa
     public function options()
     {

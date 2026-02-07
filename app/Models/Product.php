@@ -6,6 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+    protected $fillable = [
+        'sku',
+        'name',
+        'description',
+        'image_path',
+        'price',
+        'subcategory_id',
+    ];
+
     // Relacion uno a muchos inversa
     public function subCategory()
     {
