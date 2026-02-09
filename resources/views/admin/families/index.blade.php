@@ -7,7 +7,11 @@
         'name' => 'Families',
     ],
 ]">
-
+    <x-slot name="action">
+        <a href="{{ route('admin.families.create') }}" class="btn btn-blue">
+            Nuevo
+        </a>
+    </x-slot>
     @if ($families->count())
         <div class="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base border border-default">
             <table class="w-full text-sm text-left rtl:text-right text-body">

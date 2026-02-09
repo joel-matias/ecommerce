@@ -13,7 +13,8 @@ class FamilyController extends Controller
      */
     public function index()
     {
-        $families = Family::paginate();
+        $families = Family::orderBy('id', 'desc')
+            ->paginate(10);
 
         return view('admin.families.index', compact('families'));
     }
@@ -23,7 +24,7 @@ class FamilyController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.families.create');
     }
 
     /**
@@ -31,7 +32,19 @@ class FamilyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+        ]);
+
+        Family::create($request->all());
+
+        session()->flash('swal', [
+            'icon' => 'success',
+            'title' => 'Familia creada!',
+            'text' => 'La familia ha sido creada correctamente.',
+        ]);
+
+        return redirect()->route('admin.families.index');
     }
 
     /**
@@ -47,7 +60,7 @@ class FamilyController extends Controller
      */
     public function edit(Family $family)
     {
-        //
+        return view('admin.families.edit', compact('family'));
     }
 
     /**
@@ -55,7 +68,19 @@ class FamilyController extends Controller
      */
     public function update(Request $request, Family $family)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+        ]);
+
+        $family->update($request->all());
+
+        session()->flash('swal', [
+            'icon' => 'success',
+            'title' => 'Familia actualizada!',
+            'text' => 'La familia ha sido actualizada correctamente.',
+        ]);
+
+        return redirect()->route('admin.families.edit', $family);
     }
 
     /**
@@ -63,6 +88,8 @@ class FamilyController extends Controller
      */
     public function destroy(Family $family)
     {
-        //
+        $family->delete();
+
+        return redirect()->route('admin.families.index');
     }
 }

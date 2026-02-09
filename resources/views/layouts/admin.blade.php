@@ -38,7 +38,15 @@
 
     <div class="p-4 sm:ml-64 mt-14">
         <div class="mt-14">
-            @include('layouts.partials.admin.breadcrumb')
+            <div class="flex justify-between items-center">
+                @include('layouts.partials.admin.breadcrumb')
+
+                @isset($action)
+                    <div>
+                        {{ $action }}
+                    </div>
+                @endisset
+            </div>
 
             <div class="p-4 border-1 border-default border rounded-lg">
 
@@ -47,8 +55,15 @@
         </div>
     </div>
 
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @livewireScripts
+    @stack('js')
+
+    @if (session('swal'))
+        <script>
+            Swal.fire({!! json_encode(session('swal')) !!});
+        </script>
+    @endif
 </body>
 
 </html>
