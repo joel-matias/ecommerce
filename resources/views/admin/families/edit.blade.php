@@ -42,7 +42,27 @@
     @push('js')
         <script>
             function confirmDelete() {
-                document.getElementById('delete-form').submit();
+                // document.getElementById('delete-form').submit();
+
+                Swal.fire({
+                    title: "Estas Seguro?",
+                    text: "No podrás revertir esto!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "¡Sí, bórralo!",
+                    cancelButtonText: "Cancelar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Swal.fire({
+                        //     title: "Eliminado!",
+                        //     text: "La familia ha sido eliminada.",
+                        //     icon: "success"
+                        // });
+                        document.getElementById('delete-form').submit();
+                    }
+                });
             }
         </script>
     @endpush
