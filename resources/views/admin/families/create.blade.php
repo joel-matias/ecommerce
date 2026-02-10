@@ -15,6 +15,8 @@
     <div class="card">
         <form action="{{ route('admin.families.store') }}" method="POST">
             @csrf
+            <x-validation-errors class="mb-4" />
+
             <div class="mb-4">
                 <x-label class="mb-2">
                     Nombre de la familia
