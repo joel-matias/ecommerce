@@ -12,7 +12,7 @@ class Product extends Model
         'description',
         'image_path',
         'price',
-        'subcategory_id',
+        'sub_category_id',
     ];
 
     // Relacion uno a muchos inversa
