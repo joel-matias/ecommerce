@@ -87,10 +87,45 @@
                     placeholder="Ingrese el precio del producto" />
             </div>
             <div class="flex justify-end">
-                <x-button>
+                <x-danger-button class="mt-4" onclick="confirmDelete()">
+                    Eliminar
+                </x-danger-button>
+                <x-button class="mt-4 ml-2">
                     Actualizar
                 </x-button>
             </div>
         </div>
     </form>
+    <form action="{{ route('admin.products.destroy', $product) }}" method="POST" id="delete-form">
+        @csrf
+        @method('DELETE')
+    </form>
+
+    @push('js')
+        <script>
+            function confirmDelete() {
+                // document.getElementById('delete-form').submit();
+
+                Swal.fire({
+                    title: "Estas Seguro?",
+                    text: "No podrás revertir esto!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "¡Sí, bórralo!",
+                    cancelButtonText: "Cancelar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Swal.fire({
+                        //     title: "Eliminado!",
+                        //     text: "La familia ha sido eliminada.",
+                        //     icon: "success"
+                        // });
+                        document.getElementById('delete-form').submit();
+                    }
+                });
+            }
+        </script>
+    @endpush
 </div>
