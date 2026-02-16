@@ -16,6 +16,9 @@
                 @foreach ($options as $option)
                     <div class="p-6 rounded-lg border border-gray-200 relative" wire:key='option-{{ $option->id }}'>
                         <div class="absolute -top-3 px-3 bg-white">
+                            <button class="mr-1" onclick="confirmDelete({{ $option->id }}, 'option')">
+                                <i class="fa-solid fa-trash-can text-red-500 hover:text-red-600"></i>
+                            </button>
                             <span>
                                 {{ $option->name }}
                             </span>
@@ -31,7 +34,7 @@
                                             {{ $feature->description }}
 
                                             <button class="ml-0.5" {{-- wire:click="deleteFeature({{ $feature->id" }}) --}}
-                                                onclick="confirmDelete({{ $feature->id }})">
+                                                onclick="confirmDelete({{ $feature->id }}, 'feature')">
                                                 <i class="fa-solid fa-xmark hover:text-red-500">
                                                 </i>
                                             </button>
@@ -45,7 +48,7 @@
                                                 style="background-color: {{ $feature->value }}"></span>
                                             <button
                                                 class="absolute z-10 left-3 -top-2 rounded-full bg-red-500 hover:red-600 h-4 w-4 flex justify-center items-center"
-                                                {{-- wire:click="deleteFeature({{ $feature->id" }}) --}} onclick="confirmDelete({{ $feature->id }})">
+                                                {{-- wire:click="deleteFeature({{ $feature->id" }}) --}} onclick="confirmDelete({{ $feature->id }}, 'feature')">
                                                 <i class="fa-solid fa-xmark text-white text-xs"></i>
                                             </button>
                                         </div>
@@ -165,7 +168,7 @@
 
     @push('js')
         <script>
-            function confirmDelete(featureId) {
+            function confirmDelete(id, type) {
                 Swal.fire({
                     title: "Estas Seguro?",
                     text: "No podrás revertir esto!",
@@ -177,7 +180,15 @@
                     cancelButtonText: "Cancelar"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        @this.call('deleteFeature', featureId)
+
+                        switch (type) {
+                            case 'feature':
+                                @this.call('deleteFeature', id)
+                                break;
+                            case 'option':
+                                @this.call('deleteOption', id)
+                                break;
+                        }
                     }
                 });
             }

@@ -36,6 +36,12 @@ class ManageOptions extends Component
         $this->options = Option::with('features')->get();
     }
 
+    public function deleteOption(Option $option)
+    {
+        $option->delete();
+        $this->options = Option::with('features')->get();
+    }
+
     public function removeFeature($index)
     {
         $this->newOption->removeFeature($index);
