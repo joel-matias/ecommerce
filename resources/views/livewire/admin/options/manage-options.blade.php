@@ -14,7 +14,7 @@
         <div class="p-6">
             <div class="space-y-6">
                 @foreach ($options as $option)
-                    <div class="p-6 rounded-lg border border-gray-200 relative">
+                    <div class="p-6 rounded-lg border border-gray-200 relative" wire:key='option-{{ $option->id }}'>
                         <div class="absolute -top-3 px-3 bg-white">
                             <span>
                                 {{ $option->name }}
@@ -40,6 +40,10 @@
                                     @default
                                 @endswitch
                             @endforeach
+                        </div>
+
+                        <div class="mb-4">
+                            @livewire('admin.options.add-new-feature', ['option' => $option], key('add-new-feature' . $option->id))
                         </div>
                     </div>
                 @endforeach
@@ -109,7 +113,7 @@
                                     @case(2)
                                         <div
                                             class="flex border border-gray-300 h-[42px] rounded-md items-center justify-between px-3">
-                                            {{ $newOption['features'][$index]['value'] ?: 'Seleccione un color' }}
+                                            {{ $newOption->features[$index]['value'] ?: 'Seleccione un color' }}
                                             <input type="color"
                                                 wire:model.live="newOption.features.{{ $index }}.value">
                                         </div>
