@@ -86,6 +86,17 @@
                 <x-input type="number" step="0.01" wire:model="productEdit.price" class="w-full"
                     placeholder="Ingrese el precio del producto" />
             </div>
+
+            @empty($product->variants->count() > 0)
+                <div class="mb-4">
+                    <x-label class="mb-1">
+                        Stock
+                    </x-label>
+                    <x-input type="number" step="0.01" wire:model="productEdit.stock" class="w-full"
+                        placeholder="Ingrese el stock del producto" />
+                </div>
+            @endempty
+
             <div class="flex justify-end">
                 <x-danger-button class="mt-4" onclick="confirmDelete()">
                     Eliminar

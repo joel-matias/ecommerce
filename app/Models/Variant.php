@@ -11,6 +11,7 @@ class Variant extends Model
     protected $fillable = [
         'sku',
         'image_path',
+        'stock',
         'product_id',
     ];
 

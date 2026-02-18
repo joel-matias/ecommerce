@@ -7,6 +7,7 @@ use App\Models\Family;
 use App\Models\SubCategory;
 use Illuminate\Support\Facades\Storage as FacadesStorage;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -33,6 +34,7 @@ class ProductEdit extends Component
             'name',
             'description',
             'price',
+            'stock',
             'image_path',
             'sub_category_id'
         );
@@ -67,6 +69,12 @@ class ProductEdit extends Component
         $this->productEdit['sub_category_id'] = '';
     }
 
+    #[On('variant-generate')]
+    public function updateProduct()
+    {
+        $this->product = $this->product->fresh();
+    }
+
     #[Computed()]
     public function categories()
     {
@@ -87,6 +95,7 @@ class ProductEdit extends Component
             'product.name' => 'required|max:255',
             'product.description' => 'nullable',
             'product.price' => 'required|numeric|min:0',
+            'product.stock' => 'required|numeric|min:0',
             'product.sub_category_id' => 'required|exists:sub_categories,id',
         ]);
 

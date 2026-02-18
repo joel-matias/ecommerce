@@ -1,5 +1,5 @@
 <div>
-    <section class="roudend-lg border border-gray-100 bg-white shadow-lg mb-12">
+    <section class="roudend-lg border border-gray-100 bg-white shadow-lg">
         <header class="border-b border-gray-200 px-6 py-2">
             <div class="flex justify-between">
                 <h1 class="text-lg font-semibold text-gray-700">
@@ -81,36 +81,38 @@
         </div>
     </section>
 
-    <section class="roudend-lg border border-gray-100 bg-white shadow-lg">
-        <header class="border-b border-gray-200 px-6 py-2">
-            <div class="flex justify-between">
-                <h1 class="text-lg font-semibold text-gray-700">
-                    Variantes
-                </h1>
-            </div>
-        </header>
-        <div class="p-6">
-            <ul class="divide-y -my-4">
-                @foreach ($product->variants as $item)
-                    <li class="py-4 flex items-center">
-                        <img src="{{ $item->image }}" class="w-12 h-12 object-cover object-center ">
-                        <p class="divide-x">
-                            @foreach ($item->features as $feature)
-                                <span class="px-3">
-                                    {{ $feature->description }}
-                                </span>
-                            @endforeach
-                        </p>
+    @if ($product->variants->count())
+        <section class="roudend-lg border border-gray-100 bg-white shadow-lg mt-12">
+            <header class="border-b border-gray-200 px-6 py-2">
+                <div class="flex justify-between">
+                    <h1 class="text-lg font-semibold text-gray-700">
+                        Variantes
+                    </h1>
+                </div>
+            </header>
+            <div class="p-6">
+                <ul class="divide-y -my-4">
+                    @foreach ($product->variants as $item)
+                        <li class="py-4 flex items-center">
+                            <img src="{{ $item->image }}" class="w-12 h-12 object-cover object-center ">
+                            <p class="divide-x">
+                                @foreach ($item->features as $feature)
+                                    <span class="px-3">
+                                        {{ $feature->description }}
+                                    </span>
+                                @endforeach
+                            </p>
 
-                        <a href="{{ route('admin.products.variants', [$product, $item]) }}"
-                            class="ml-auto btn btn-blue">
-                            Editar
-                        </a>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
-    </section>
+                            <a href="{{ route('admin.products.variants', [$product, $item]) }}"
+                                class="ml-auto btn btn-blue">
+                                Editar
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </section>
+    @endif
 
     <x-dialog-modal wire:model="openModal">
         <x-slot name="title">
