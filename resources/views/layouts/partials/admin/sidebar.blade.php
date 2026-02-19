@@ -32,9 +32,15 @@
         ],
         [
             'icon' => 'fa-solid fa-box',
-            'name' => 'Products',
+            'name' => 'Productos',
             'route' => route('admin.products.index'),
             'active' => request()->routeIs('admin.products.*'),
+        ],
+        [
+            'icon' => 'fa-solid fa-images',
+            'name' => 'Portadas',
+            'route' => route('admin.covers.index'),
+            'active' => request()->routeIs('admin.covers.*'),
         ],
     ];
 @endphp
