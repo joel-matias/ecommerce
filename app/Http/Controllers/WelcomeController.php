@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cover;
+use App\Models\Product;
 
 class WelcomeController extends Controller
 {
@@ -16,6 +17,10 @@ class WelcomeController extends Controller
             })
             ->get();
 
-        return view('welcome', compact('covers'));
+        $last_products = Product::orderBy('created_at', 'desc')
+            ->take(12)
+            ->get();
+
+        return view('welcome', compact('covers', 'last_products'));
     }
 }
