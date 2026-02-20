@@ -14,9 +14,9 @@
         </a>
     </x-slot>
 
-    <ul class="space-y-4">
+    <ul class="space-y-4" id="covers">
         @foreach ($covers as $cover)
-            <li class="bg-white rounded-lg shadow-lg lg:flex overflow-hidden">
+            <li class="bg-white rounded-lg shadow-lg lg:flex overflow-hidden cursor-move" data-id="{{ $cover->id }}">
                 <img src="{{ $cover->image }}" alt=""
                     class="w-full lg:w-64 aspect-[3/1] object-cover object-center">
 
@@ -66,4 +66,24 @@
         @endforeach
     </ul>
 
+
+    @push('js')
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.6/Sortable.min.js"></script>
+        <script>
+            new Sortable(covers, {
+                animation: 140,
+                ghostClass: 'bg-blue-200',
+                store: {
+                    set: (sortable) => {
+                        const sorts = sortable.toArray();
+                        axios.post("{{ route('api.sort.covers') }}", {
+                            sorts: sorts
+                        }).catch((e) => {
+                            console.log(e);
+                        })
+                    }
+                }
+            });
+        </script>
+    @endpush
 </x-admin-layout>
