@@ -12,11 +12,16 @@
                                 d="M5 7h14M5 12h14M5 17h10" />
                         </svg>
                     </button>
-                    <a href="https://flowbite.com" class="flex items-center justify-between">
-                        <img src="https://flowbite.com/docs/images/logo.svg" class="h-6 me-3" alt="FlowBite Logo" />
-                        <span
-                            class="self-center text-lg font-semibold whitespace-nowrap dark:text-black">Flowbite</span>
-                    </a>
+                    <h1 class="text-white">
+                        <a href="/" class="inline-flex flex-col items-end">
+                            <span class="text-xl md:text-2xl lg:text-3xl leading-4 md:leading-6 font-semibold">
+                                Ecommerce
+                            </span>
+                            <span class="text-xs">
+                                Tienda online
+                            </span>
+                        </a>
+                    </h1>
                 </div>
                 <div class="flex items-center">
                     <div class="flex items-center ms-3">
