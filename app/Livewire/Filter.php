@@ -14,6 +14,8 @@ class Filter extends Component
 
     public $family_id;
 
+    public $category_id;
+
     public $options;
 
     public $selectedFeatures = [];
@@ -24,16 +26,29 @@ class Filter extends Component
 
     public function mount()
     {
-        $this->options = Option::whereHas('products.subcategory.category', function ($query) {
-            $query->where('family_id', $this->family_id);
+        $this->options = Option::when($this->family_id, function ($query) {
+            $query->whereHas('products.subcategory.category', function ($query) {
+                $query->where('family_id', $this->family_id);
+            })
+                ->with([
+                    'features' => function ($query) {
+                        $query->whereHas('variants.product.subcategory.category', function ($query) {
+                            $query->where('family_id', $this->family_id);
+                        });
+                    },
+                ]);
         })
-            ->with([
-                'features' => function ($query) {
-                    $query->whereHas('variants.product.subcategory.category', function ($query) {
-                        $query->where('family_id', $this->family_id);
-                    });
-                },
-            ])
+            ->when($this->category_id, function ($query) {
+                $query->whereHas('products.subcategory', function ($query) {
+                    $query->where('category_id', $this->category_id);
+                })->with([
+                    'features' => function ($query) {
+                        $query->whereHas('variants.product.subcategory', function ($query) {
+                            $query->where('category_id', $this->category_id);
+                        });
+                    },
+                ]);
+            })
             ->get()->toArray();
     }
 
@@ -45,10 +60,16 @@ class Filter extends Component
 
     public function render()
     {
-
-        $products = Product::whereHas('subcategory.category', function ($query) {
-            $query->where('family_id', $this->family_id);
+        $products = Product::when($this->family_id, function ($query) {
+            $query->whereHas('subcategory.category', function ($query) {
+                $query->where('family_id', $this->family_id);
+            });
         })
+            ->when($this->category_id, function ($query) {
+                $query->whereHas('subcategory', function ($query) {
+                    $query->where('category_id', $this->category_id);
+                });
+            })
             ->when($this->orderBy == 1, function ($query) {
                 $query->orderBy('created_at', 'desc');
             })
