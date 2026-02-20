@@ -65,8 +65,9 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
-
+    // cambie la hora a mexico
+    // 'timezone' => 'UTC',
+    'timezone' => 'America/Mexico_City',
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
