@@ -15,6 +15,10 @@ class Filter extends Component
 
     public $options;
 
+    public $selectedFeatures = [];
+
+    public $orderBy = 1;
+
     public function mount()
     {
         $this->options = Option::whereHas('products.subcategory.category', function ($query) {
@@ -27,7 +31,7 @@ class Filter extends Component
                     });
                 },
             ])
-            ->get();
+            ->get()->toArray();
     }
 
     public function render()
@@ -35,7 +39,22 @@ class Filter extends Component
 
         $products = Product::whereHas('subcategory.category', function ($query) {
             $query->where('family_id', $this->family_id);
-        })->paginate(12);
+        })
+            ->when($this->orderBy == 1, function ($query) {
+                $query->orderBy('created_at', 'desc');
+            })
+            ->when($this->orderBy == 2, function ($query) {
+                $query->orderBy('price', 'desc');
+            })
+            ->when($this->orderBy == 3, function ($query) {
+                $query->orderBy('price', 'asc');
+            })
+            ->when($this->selectedFeatures, function ($query) {
+                $query->whereHas('variants.features', function ($query) {
+                    $query->whereIn('features.id', $this->selectedFeatures);
+                });
+            })
+            ->paginate(12);
 
         return view('livewire.filter', compact('products'));
     }
