@@ -21,6 +21,53 @@ class Product extends Model
         'sub_category_id',
     ];
 
+    public function scopeVerifyFamily($query, $family_id)
+    {
+        $query->when($family_id, function ($query, $family_id) {
+            $query->whereHas('subcategory.category', function ($query) use ($family_id) {
+                $query->where('family_id', $family_id);
+            });
+        });
+    }
+
+    public function scopeVerifyCategory($query, $category_id)
+    {
+        $query->when($category_id, function ($query, $category_id) {
+            $query->whereHas('subcategory', function ($query) use ($category_id) {
+                $query->where('category_id', $category_id);
+            });
+        });
+    }
+
+    public function scopeVerifySubCategory($query, $subcategory_id)
+    {
+        $query->when($subcategory_id, function ($query, $subcategory_id) {
+            $query->where('sub_category_id', $subcategory_id);
+        });
+    }
+
+    public function scopeSelectFeatures($query, $selectedFeatures)
+    {
+        $query->when($selectedFeatures, function ($query, $selectedFeatures) {
+            $query->whereHas('variants.features', function ($query) use ($selectedFeatures) {
+                $query->whereIn('features.id', $selectedFeatures);
+            });
+        });
+    }
+
+    public function scopeCustomOrder($query, $orderBy)
+    {
+        $query->when($orderBy == 1, function ($query) {
+            $query->orderBy('created_at', 'desc');
+        })
+            ->when($orderBy == 2, function ($query) {
+                $query->orderBy('price', 'desc');
+            })
+            ->when($orderBy == 3, function ($query) {
+                $query->orderBy('price', 'asc');
+            });
+    }
+
     protected function image(): Attribute
     {
         return Attribute::make(
