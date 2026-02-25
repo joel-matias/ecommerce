@@ -5,6 +5,7 @@ use App\Http\Controllers\FamilyController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\WelcomeController;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome.index');
@@ -23,4 +24,10 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+});
+
+Route::get('pruebaa', function () {
+    Cart::instance('shopping');
+
+    return Cart::content();
 });
