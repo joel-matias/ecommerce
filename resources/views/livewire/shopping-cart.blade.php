@@ -5,7 +5,8 @@
                 <h1 class="text-lg">
                     Carrito de compras ({{ Cart::count() }}) productos
                 </h1>
-                <button class="font-semibold text-gray-600 underline hover:no-underline hover:text-purple-500">
+                <button wire:click="destroy()"
+                    class="font-semibold text-gray-600 underline hover:no-underline hover:text-purple-500">
                     Limpiar carrito
                 </button>
             </div>
@@ -22,7 +23,7 @@
                                         {{ $item->name }}
                                     </a>
                                 </p>
-                                <button
+                                <button wire:click="remove('{{ $item->rowId }}')"
                                     class="bg-red-100 hover:bg-red-200 text-red-800 text-xs font-semibold rounded px-2.5 py-0.5">
                                     <i class="fa-solid fa-xmark"></i>
                                     Quitar
@@ -34,13 +35,13 @@
                             </p>
 
                             <div class="ml-auto space-x-2">
-                                <button class="btn btn-gray">
+                                <button class="btn btn-gray" wire:click="decrease('{{ $item->rowId }}')">
                                     -
                                 </button>
                                 <span class="inline-block w-2 text-center">
                                     {{ $item->qty }}
                                 </span>
-                                <button class="btn btn-gray">
+                                <button class="btn btn-gray" wire:click="increase('{{ $item->rowId }}')">
                                     +
                                 </button>
                             </div>
