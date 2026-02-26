@@ -25,7 +25,7 @@
 
         <div class="relative mb-6">
             <figure>
-                <img class="aspect-[16/9] w-full object-cover object-center" src="{{ $variant->image }}" alt=""
+                <img class="aspect-[1/1] w-full object-cover object-center" src="{{ $variant->image }}" alt=""
                     id="imgPreview">
             </figure>
             <div class="absolute top-8 right-8">

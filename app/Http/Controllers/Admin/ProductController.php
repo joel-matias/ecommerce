@@ -93,7 +93,7 @@ class ProductController extends Controller
         ]);
 
         if ($request->image) {
-            Storage::delete($variant->image_path);
+            $variant->image_path ? Storage::delete($variant->image_path) : null;
             $data['image_path'] = $request->image->store('products');
         }
 
