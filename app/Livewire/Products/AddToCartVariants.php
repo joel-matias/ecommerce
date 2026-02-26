@@ -4,6 +4,7 @@ namespace App\Livewire\Products;
 
 use App\Models\Feature;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 
@@ -50,6 +51,10 @@ class AddToCartVariants extends Component
                     ->pluck('description', 'id')->toArray(),
             ],
         ]);
+
+        if (Auth::check()) {
+            Cart::store(Auth::id());
+        }
 
         $this->dispatch('swal', [
             'icon' => 'success',
