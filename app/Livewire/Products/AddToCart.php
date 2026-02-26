@@ -32,6 +32,8 @@ class AddToCart extends Component
             Cart::store(Auth::id());
         }
 
+        $this->dispatch('cartUpdated', Cart::count());
+
         $this->dispatch('swal', [
             'icon' => 'success',
             'title' => '¡Bien echo!',
