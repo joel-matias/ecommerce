@@ -16,6 +16,7 @@ class User extends Authenticatable
 
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
+
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
@@ -29,6 +30,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'last_name',
+        'document_type',
+        'document_number',
+        'phone',
     ];
 
     /**
