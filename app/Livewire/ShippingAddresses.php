@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Forms\CreateAddressForm;
 use App\Models\Address;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -9,6 +10,10 @@ use Livewire\Component;
 class ShippingAddresses extends Component
 {
     public $addresses;
+
+    public $newAddress = true;
+
+    public CreateAddressForm $createAddress;
 
     public function mount()
     {
