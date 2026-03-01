@@ -112,7 +112,7 @@
             document.addEventListener('DOMContentLoaded', function() {
 
                 let purchasenumber = Math.floor(Math.random() * 1000000000);
-                let amount = {{ Cart::instance('shopping')->subtotal() + 100 }}
+                let amount = {{ $amount }}
 
                 VisanetCheckout.configure({
                     sessiontoken: '{{ $session_token }}',
@@ -124,7 +124,8 @@
                     timeouturl: 'about:blank',
                     merchantlogo: 'img/comercio.png',
                     formbuttoncolor: '#000000',
-                    action: 'paginaRespuesta',
+                    action: "{{ route('checkout.paid') }}?amount=" + amount + "&purchaseNumber=" +
+                        purchasenumber,
                     complete: function(params) {
                         alert(JSON.stringify(params));
                     }
