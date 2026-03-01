@@ -110,6 +110,46 @@
                 </div>
             @else
                 @if ($addresses->count())
+                    <ul class="grid grid-cols-3 gap-4">
+                        @foreach ($addresses as $address)
+                            <li class="bg-white rounded-lg shadow">
+                                <div class="p-4 flex items-center">
+                                    <div>
+                                        <i class="fa-solid fa-house text-xl text-purple-600"></i>
+                                    </div>
+                                    <div class="flex-1 mx-4 text-xs">
+
+                                        <p class="text-purple-600">
+                                            {{ $address->type == 1 ? 'Domicilio' : 'Oficina' }}
+                                        </p>
+
+                                        <p class="text-gray-700 font-semibold">
+                                            {{ $address->colonia }}
+                                        </p>
+
+                                        <p class="text-gray-700 font-semibold">
+                                            {{ $address->description }}
+                                        </p>
+
+                                        <p class="text-gray-700 font-semibold">
+                                            {{ $address->receiver_info['name'] }}
+                                        </p>
+                                    </div>
+                                    <div class="text-xs text-gray-800 flex flex-col">
+                                        <button>
+                                            <i class="fa-solid fa-star"></i>
+                                        </button>
+                                        <button>
+                                            <i class="fa-solid fa-pencil"></i>
+                                        </button>
+                                        <button>
+                                            <i class="fa-solid fa-trash-can"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
                 @else
                     <p class="text-center">No se han encontrado direcciones</p>
                 @endif

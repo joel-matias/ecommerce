@@ -11,7 +11,7 @@ class ShippingAddresses extends Component
 {
     public $addresses;
 
-    public $newAddress = true;
+    public $newAddress = false;
 
     public CreateAddressForm $createAddress;
 
