@@ -51,7 +51,7 @@
                     </div>
                 </div>
 
-                <a href="" class="btn btn-purple block w-full text-center">
+                <a href="{{ route('checkout.index') }}" class="btn btn-purple block w-full text-center">
                     Siguiente
                 </a>
             </div>
