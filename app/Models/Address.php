@@ -13,7 +13,7 @@ class Address extends Model
         'user_id',
         'type',
         'description',
-        'district',
+        'colonia',
         'reference',
         'receiver',
         'receiver_info',

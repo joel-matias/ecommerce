@@ -8,6 +8,9 @@
         <div class="p-4">
 
             @if ($newAddress)
+
+                <x-validation-errors class="mb-6" />
+
                 <div class="grid grid-cols-4 gap-4">
                     {{-- Tipo --}}
                     <div class="col-span-1">
@@ -25,7 +28,7 @@
                     {{-- Colonia --}}
                     <div class="col-span-2">
                         <x-input type="text" placeholder="Colonia" class="w-full"
-                            wire:model="createAddress.district" />
+                            wire:model="createAddress.colonia" />
                     </div>
                     {{-- Referencia --}}
                     <div class="col-span-2">
@@ -36,53 +39,73 @@
 
                 <hr class="my-4">
 
-                <div>
+                <div x-data="{
+                    receiver: @entangle('createAddress.receiver'),
+                    receiver_info: @entangle('createAddress.receiver_info')
+                }" x-init="$watch('receiver', value => {
+                    if (value == 1) {
+                        receiver_info.name = '{{ Auth::user()->name }}';
+                        receiver_info.last_name = '{{ Auth::user()->last_name }}';
+                        receiver_info.document_type = '{{ Auth::user()->document_type }}';
+                        receiver_info.document_number = '{{ Auth::user()->document_number }}';
+                        receiver_info.phone = '{{ Auth::user()->phone }}';
+                    } else {
+                        receiver_info.name = '';
+                        receiver_info.last_name = '';
+                        receiver_info.document_number = '';
+                        receiver_info.phone = '';
+                    }
+                })">
                     <p class="font-semibold mb-2">
                         Quien recibira el pedido
                     </p>
                     <div class="flex space-x-2 mb-4">
                         <label class="flex items-center">
-                            <input type="radio" value="1" class="mr-1">
+                            <input x-model="receiver" type="radio" value="1" class="mr-1">
                             Sere Yo
                         </label>
                         <label class="flex items-center">
-                            <input type="radio" value="2" class="mr-1">
+                            <input x-model="receiver" type="radio" value="2" class="mr-1">
                             Otra Persona
                         </label>
                     </div>
-                </div>
 
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <x-input class="w-full" placeholder="Nombres" />
-                    </div>
-                    <div>
-                        <x-input class="w-full" placeholder="Apellidos" />
-                    </div>
-                    <div>
-                        <div class="flex space-x-2">
-                            <x-select>
-                                @foreach (\App\Enums\TypeOfDocuments::cases() as $item)
-                                    <option value="{{ $item->value }}">
-                                        {{ $item->name }}
-                                    </option>
-                                @endforeach
-                            </x-select>
-                            <x-input class="w-full" placeholder="Numero de Documento" />
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <x-input class="w-full" placeholder="Nombres" x-model="receiver_info.name"
+                                x-bind:disabled="receiver == 1" />
                         </div>
-                    </div>
-                    <div>
-                        <x-input class="w-full" placeholder="Telefono" />
-                    </div>
-                    <div>
-                        <button class="btn btn-outline-gray w-full">
-                            Cancelar
-                        </button>
-                    </div>
-                    <div>
-                        <button class="btn btn-purple w-full">
-                            Guardar
-                        </button>
+                        <div>
+                            <x-input class="w-full" placeholder="Apellidos" x-model="receiver_info.last_name"
+                                x-bind:disabled="receiver == 1" />
+                        </div>
+                        <div>
+                            <div class="flex space-x-2">
+                                <x-select x-model="receiver_info.document_type">
+                                    @foreach (\App\Enums\TypeOfDocuments::cases() as $item)
+                                        <option value="{{ $item->value }}">
+                                            {{ $item->name }}
+                                        </option>
+                                    @endforeach
+                                </x-select>
+                                <x-input class="w-full" placeholder="Numero de Documento"
+                                    x-model="receiver_info.document_number" />
+                            </div>
+                        </div>
+
+                        <div>
+                            <x-input class="w-full" placeholder="Telefono" x-model="receiver_info.phone" />
+                        </div>
+                        <div>
+                            <button class="btn btn-outline-gray w-full" wire:click="$set('newAddress', false)">
+                                Cancelar
+                            </button>
+                        </div>
+                        <div>
+                            <button class="btn btn-purple w-full" wire:click="store">
+                                Guardar
+                            </button>
+                        </div>
                     </div>
                 </div>
             @else
