@@ -35,7 +35,6 @@ class ShippingAddresses extends Component
         $this->createAddress->save();
         $this->addresses = Address::where('user_id', Auth::id())->get();
         $this->newAddress = false;
-
     }
 
     public function setDefaultAddress($id)
@@ -45,6 +44,15 @@ class ShippingAddresses extends Component
                 'default' => $address->id == $id ? true : false,
             ]);
         });
+    }
+
+    public function deleteAddress($id)
+    {
+        Address::find($id)->delete();
+        $this->addresses = Address::where('user_id', Auth::id())->get();
+        if ($this->addresses->where('default', true)->count() == 0 && $this->addresses->count() > 0) {
+            $this->addresses->first()->update(['default' => true]);
+        }
     }
 
     public function edit($id)

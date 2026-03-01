@@ -14,7 +14,7 @@
                 <div class="grid grid-cols-4 gap-4">
                     {{-- Tipo --}}
                     <div class="col-span-1">
-                        <x-select wire:model="editAddress.type">
+                        <x-select wire:model="createAddress.type">
                             <option value="">Tipo de direccion</option>
                             <option value="1">Domicilio</option>
                             <option value="2">Oficina</option>
@@ -115,7 +115,7 @@
                     <div class="grid grid-cols-4 gap-4">
                         {{-- Tipo --}}
                         <div class="col-span-1">
-                            <x-select wire:model="createAddress.type">
+                            <x-select wire:model="editAddress.type">
                                 <option value="">Tipo de direccion</option>
                                 <option value="1">Domicilio</option>
                                 <option value="2">Oficina</option>
@@ -213,7 +213,8 @@
                     @if ($addresses->count())
                         <ul class="grid grid-cols-3 gap-4">
                             @foreach ($addresses as $address)
-                                <li class="{{ $address->default ? 'bg-purple-200' : 'bg-white' }} rounded-lg shadow">
+                                <li class="{{ $address->default ? 'bg-purple-200' : 'bg-white' }} rounded-lg shadow"
+                                    wire:key="addresses-{{ $address->id }}">
                                     <div class="p-4 flex items-center">
                                         <div>
                                             <i class="fa-solid fa-house text-xl text-purple-600"></i>
@@ -243,7 +244,7 @@
                                             <button wire:click="edit({{ $address->id }})">
                                                 <i class="fa-solid fa-pencil"></i>
                                             </button>
-                                            <button>
+                                            <button wire:click="deleteAddress({{ $address->id }})">
                                                 <i class="fa-solid fa-trash-can"></i>
                                             </button>
                                         </div>
