@@ -49,12 +49,87 @@
             </div>
             <div class="col-span-1">
                 <div class="lg:max-w-[40rem] py-12 px-4 lg:pl-8 sm:pr-6 lg:pr-8 mr-auto">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nobis, exercitationem corporis
-                        eius
-                        sunt magnam quasi maiores temporibus neque possimus delectus architecto labore nihil. Aliquam
-                        numquam cumque sit hic ratione.</p>
+                    <ul class="space-y-4 mb-4">
+                        @foreach (Cart::instance('shopping')->content() as $item)
+                            <li class="flex items-center space-x-4">
+                                <div class="flex-shrink-0 relative">
+                                    <img class="h-16 aspect-square" src="{{ $item->options->image }}" alt="">
+                                    <div
+                                        class="flex justify-center items-center h-6 w-6 bg-gray-900 bg-opacity-70 rounded-full absolute -right-2 -top-2">
+                                        <span class="text-white font-semibold">{{ $item->qty }}</span>
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <p>
+                                        {{ $item->name }}
+                                    </p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <p>
+                                        $ {{ $item->price }}
+                                    </p>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+
+                    <div class="flex justify-between">
+                        <p>Subtotal</p>
+                        <p>{{ Cart::instance('shopping')->subtotal() }}</p>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <p>Precio envio
+                            <i class="fas fa-info-circle" title="El precio de envio es de $100"></i>
+                        </p>
+                        <p>$ 100.00</p>
+                    </div>
+
+                    <hr class="my-3">
+
+                    <div class="flex justify-between mb-4">
+                        <p class="text-lg font-semibold">
+                            Total
+                        </p>
+                        <p>
+                            $ {{ Cart::instance('shopping')->subtotal() + 100 }}
+                        </p>
+                    </div>
+                    <div>
+                        <button class="btn btn-purple w-full" onclick="VisanetCheckout.open();">
+                            Finalizar pedido
+                        </button>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    @push('js')
+        <script type="text/javascript" src="{{ config('services.niubiz.url_js') }}"></script>
+        <script type="text/javascript">
+            document.addEventListener('DOMContentLoaded', function() {
+
+                let purchasenumber = Math.floor(Math.random() * 1000000000);
+                let amount = {{ Cart::instance('shopping')->subtotal() + 100 }}
+
+                VisanetCheckout.configure({
+                    sessiontoken: '{{ $session_token }}',
+                    channel: 'web',
+                    merchantid: "{{ config('services.niubiz.merchant_id') }}",
+                    purchasenumber: purchasenumber,
+                    amount: amount,
+                    expirationminutes: '20',
+                    timeouturl: 'about:blank',
+                    merchantlogo: 'img/comercio.png',
+                    formbuttoncolor: '#000000',
+                    action: 'paginaRespuesta',
+                    complete: function(params) {
+                        alert(JSON.stringify(params));
+                    }
+                });
+            })
+        </script>
+    @endpush
 </x-app-layout>
