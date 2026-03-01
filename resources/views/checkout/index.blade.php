@@ -100,6 +100,36 @@
                             Finalizar pedido
                         </button>
 
+                        @if (session('niubiz'))
+                            @php
+                                $niubiz = session('niubiz');
+
+                                $response = $niubiz['response'];
+
+                                $purchaseNumber = $niubiz['purchaseNumber'];
+                            @endphp
+
+                            @isset($response['data'])
+                                <div class="bg-red-100 text-red-800 p-4 rounded-lg mt-8" role="alert">
+                                    <p class="mb-4">
+                                        {{ $response['errorMessage'] ?? ($response['dataMap']['ACTION_DESCRIPTION'] ?? 'No se pudo realizar tu transacción') }}
+                                    </p>
+                                    <p>
+                                        <b>Numero de pedido:</b>
+                                        {{ $purchaseNumber }}
+                                    </p>
+                                    <p>
+                                        <b>Fecha y hora del pedido:</b>
+                                        {{ \Carbon\Carbon::createFromTimestampMs($response['header']['ecoreTransactionDate'])->format('d-m-Y H:i:s') }}
+                                    </p>
+                                    <p>
+                                        <b>Tarjeta:</b>
+                                        {{ $response['data']['CARD'] ?? ($response['dataMap']['CARD'] ?? 'N/D') }}
+                                        ({{ $response['data']['BRAND'] ?? ($response['dataMap']['BRAND'] ?? 'N/D') }})
+                                    </p>
+                                </div>
+                            @endisset
+                        @endif
                     </div>
                 </div>
             </div>

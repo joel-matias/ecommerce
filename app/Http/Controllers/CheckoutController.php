@@ -81,11 +81,13 @@ class CheckoutController extends Controller
 
         session()->flash('niubiz', [
             'response' => $response,
-
+            'purchaseNumber' => $request->purchaseNumber,
         ]);
 
         if (isset($response['dataMap']) && $response['dataMap']['ACTION_CODE'] == '000') {
             return redirect()->route('gracias');
         }
+
+        return redirect()->route('checkout.index');
     }
 }
