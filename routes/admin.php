@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CoverController;
 use App\Http\Controllers\Admin\FamilyController;
 use App\Http\Controllers\Admin\OptionController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SubcategoryController;
 use Illuminate\Support\Facades\Route;
@@ -29,3 +30,5 @@ Route::put('products/{product}/variants/{variant}', [ProductController::class, '
     ->scopeBindings();
 
 Route::resource('covers', CoverController::class);
+
+Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
