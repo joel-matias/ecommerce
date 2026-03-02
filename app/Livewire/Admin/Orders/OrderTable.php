@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Orders;
 
 use App\Models\Order;
+use Illuminate\Support\Facades\Storage;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 
@@ -49,5 +50,10 @@ class OrderTable extends DataTableComponent
                     return view('admin.orders.actions', ['order' => $row]);
                 }),
         ];
+    }
+
+    public function downloadTicket(Order $order)
+    {
+        return Storage::download($order->pdf_path);
     }
 }
