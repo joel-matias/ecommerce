@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Orders;
 
+use App\Enums\OrderStatus;
 use App\Models\Order;
 use Illuminate\Support\Facades\Storage;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
@@ -55,5 +56,11 @@ class OrderTable extends DataTableComponent
     public function downloadTicket(Order $order)
     {
         return Storage::download($order->pdf_path);
+    }
+
+    public function markAsProcessing(Order $order)
+    {
+        $order->status = OrderStatus::Processing;
+        $order->save();
     }
 }
