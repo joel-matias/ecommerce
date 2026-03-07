@@ -96,7 +96,7 @@ class CheckoutController extends Controller
                 'content' => Cart::instance('shopping')->content(),
                 'address' => $address,
                 'payment_id' => $response['dataMap']['TRANSACTION_ID'],
-                'total' => Cart::subtotal(),
+                'total' => Cart::instance('shopping')->subtotal(2, '.', '') + 100,
             ]);
 
             Cart::destroy();

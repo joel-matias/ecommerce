@@ -17,11 +17,17 @@ class Order extends Model
     protected $casts = [
         'content' => 'array',
         'address' => 'array',
+        'total' => 'decimal:2',
         'status' => OrderStatus::class,
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function shipment()
+    {
+        return $this->hasMany(Shipment::class);
     }
 }

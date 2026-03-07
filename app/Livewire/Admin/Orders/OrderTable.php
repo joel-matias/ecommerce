@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Orders;
 
 use App\Enums\OrderStatus;
+use App\Models\Driver;
 use App\Models\Order;
 use Illuminate\Support\Facades\Storage;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
@@ -11,6 +12,19 @@ use Rappasoft\LaravelLivewireTables\Views\Column;
 class OrderTable extends DataTableComponent
 {
     protected $model = Order::class;
+
+    public $drivers;
+
+    public $new_shipment = [
+        'openModal' => false,
+        'order_id' => '',
+        'driver_id' => ''
+    ];
+
+    public function mount()
+    {
+        $this->drivers = Driver::all();
+    }
 
     public function configure(): void
     {
@@ -62,5 +76,35 @@ class OrderTable extends DataTableComponent
     {
         $order->status = OrderStatus::Processing;
         $order->save();
+    }
+
+    public function customView():string
+    {
+        return 'admin.orders.modal';
+    }
+
+    public function assignDriver(Order $order)
+    {
+        $this->new_shipment['order_id'] = $order->id;
+        $this->new_shipment['openModal'] = true;
+    }
+
+    public function saveShipment()
+    {
+        $this->validate([
+            'new_shipment.driver_id' => 'required|exists:drivers,id'
+        ]);
+
+        $order = Order::find($this->new_shipment['order_id']);
+
+        $order->status = OrderStatus::Shipped;
+
+        $order->save();
+
+        $order->shipment()->create([
+            'driver_id' => $this->new_shipment['driver_id']
+        ]);
+
+        $this->reset('new_shipment');
     }
 }

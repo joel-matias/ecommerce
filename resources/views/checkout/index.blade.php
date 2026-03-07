@@ -92,7 +92,7 @@
                             Total
                         </p>
                         <p>
-                            $ {{ Cart::instance('shopping')->subtotal() + 100 }}
+                            $ {{ number_format($amount, 2, '.', '') }}
                         </p>
                     </div>
                     <div>
