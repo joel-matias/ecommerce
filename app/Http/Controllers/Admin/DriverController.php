@@ -94,6 +94,14 @@ class DriverController extends Controller
      */
     public function destroy(Driver $driver)
     {
-        //
+        $driver->delete();
+
+        session()->flash('swal', [
+            'icon' => 'success',
+            'title' => '¡Conductor Eliminado!',
+            'text' => 'El conductor se a eliminado correctamente'
+        ]);
+
+        return redirect()->route('admin.drivers.index');
     }
 }

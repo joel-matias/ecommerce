@@ -50,11 +50,27 @@
                         value="{{ old('plate_number', $driver->plate_number) }}" />
                 </div>
             </div>
-            <div class="flex justify-end">
+            <div class="flex justify-end space-x-2">
+                <x-danger-button class="" id="delete-button">
+                    Eliminar
+                </x-danger-button>
                 <x-button>
                     Actualizar
                 </x-button>
             </div>
         </form>
     </div>
+
+    <form action="{{ route('admin.drivers.destroy', $driver) }}" method="POST" id="delete-form">
+        @csrf
+        @method('DELETE')
+    </form>
+
+    @push('js')
+        <script>
+            document.getElementById('delete-button').addEventListener('click', function() {
+                document.getElementById('delete-form').submit();
+            })
+        </script>
+    @endpush
 </x-admin-layout>
