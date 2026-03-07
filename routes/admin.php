@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CoverController;
+use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\Admin\FamilyController;
 use App\Http\Controllers\Admin\OptionController;
 use App\Http\Controllers\Admin\OrderController;
@@ -30,5 +31,7 @@ Route::put('products/{product}/variants/{variant}', [ProductController::class, '
     ->scopeBindings();
 
 Route::resource('covers', CoverController::class);
+
+Route::resource('drivers', DriverController::class);
 
 Route::get('orders', [OrderController::class, 'index'])->name('orders.index');

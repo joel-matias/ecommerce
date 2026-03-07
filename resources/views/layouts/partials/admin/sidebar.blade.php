@@ -49,6 +49,12 @@
             'header' => 'Ordenes y envios',
         ],
         [
+            'name' => 'Conductores',
+            'icon' => 'fa-solid fa-truck',
+            'route' => route('admin.drivers.index'),
+            'active' => request()->routeIs('admin.drivers.*'),
+        ],
+        [
             'name' => 'Ordenes',
             'icon' => 'fa-solid fa-shopping-cart',
             'route' => route('admin.orders.index'),
