@@ -7,6 +7,7 @@ use App\Enums\ShipmentStatus;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Shipment;
+use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
 
 use function Symfony\Component\Clock\now;
 
@@ -38,6 +39,22 @@ class ShipmentTable extends DataTableComponent
             Column::make('actions')
                 ->label(function($row){
                     return view('admin.shipments.actions', ['shipment' => $row]);
+                })
+        ];
+    }
+
+    public function filters():array
+    {
+        return [
+            SelectFilter::make('status')
+                ->options([
+                    'Todos',
+                    1 => 'Pendiente',
+                    2 => 'Completado',
+                    3 => 'Fallido'
+                ])
+                ->filter(function($query, $value){
+                    $query->where('status', $value);
                 })
         ];
     }
