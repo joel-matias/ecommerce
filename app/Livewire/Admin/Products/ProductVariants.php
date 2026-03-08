@@ -14,7 +14,7 @@ class ProductVariants extends Component
 
     public $product;
 
-    public $options;
+    // public $options;
 
     public $variant = [
         'option_id' => '',
@@ -34,9 +34,12 @@ class ProductVariants extends Component
         'sku' => null
     ];
 
-    public function mount()
+    #[Computed()]
+    public function options()
     {
-        $this->options = Option::all();
+        return Option::whereDoesntHave('products', function($query){
+            $query->where('product_id', $this->product->id);
+        })->get();
     }
 
     public function updatedVariantOptionId()
@@ -92,10 +95,15 @@ class ProductVariants extends Component
 
         ]);
 
+        $features = collect($this->variant['features']);
+        $features = $features->unique('id')->values()->all();
+
         $this->product->options()->attach($this->variant['option_id'], [
-            'features' => $this->variant['features'],
+            'features' => $features
         ]);
-        $this->product = $this->product->fresh();
+        // $this->product = $this->product->fresh();
+
+        $this->product->variants()->delete();
 
         $this->generarVariantes();
 
@@ -109,14 +117,23 @@ class ProductVariants extends Component
                 return $feature['id'] != $feature_id;
             }),
         ]);
+
+        Variant::where('product_id', $this->product->id)
+            ->whereHas('features', function ($query) use ($feature_id){
+                $query->where('features.id', $feature_id);
+            })
+            ->delete();
+
         $this->product = $this->product->fresh();
-        $this->generarVariantes();
+
+        // $this->generarVariantes();
     }
 
     public function deleteOption($option_id)
     {
         $this->product->options()->detach($option_id);
         $this->product = $this->product->fresh();
+        $this->product->variants()->delete();
         $this->generarVariantes();
     }
 
@@ -125,8 +142,6 @@ class ProductVariants extends Component
         $features = $this->product->options->pluck('pivot.features');
 
         $combinaciones = $this->generarCombinaciones($features);
-
-        $this->product->variants()->delete();
 
         foreach ($combinaciones as $combinacion) {
             $variant = Variant::create([

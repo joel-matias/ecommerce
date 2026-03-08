@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Variant;
+use Illuminate\Support\Str;
 
 class VariantObserver
 {
@@ -13,6 +14,11 @@ class VariantObserver
             $variant->sku = $variant->product->sku;
             $variant->save();
 
+            return;
         }
+
+        //Generar un sku nummerioco de 12 digitos
+        $variant->sku = Str::random(12);
+        $variant->save();
     }
 }

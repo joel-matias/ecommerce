@@ -135,7 +135,7 @@
                         Selecciona una opción
                     </option>
 
-                    @foreach ($options as $option)
+                    @foreach ($this->options as $option)
                         <option value="{{ $option->id }}">
                             {{ $option->name }}
                         </option>
