@@ -18,13 +18,13 @@ class DatabaseSeeder extends Seeder
         Storage::makeDirectory('products');
 
         User::factory()->create([
-            'name' => 'Joel Geovanny',
-            'last_name' => 'Matias Santiago',
+            'name' => 'Carlos Perez',
+            'last_name' => 'Lopez',
             'document_type' => '1',
             'document_number' => '12345678',
             'phone' => '987654321',
-            'email' => 'joelsantiagos000@gmail.com',
-            'password' => bcrypt('joel12san'),
+            'email' => 'carlosperez@gmail.com',
+            'password' => bcrypt('carlosadmin'),
         ]);
 
         User::factory(20)->create();
