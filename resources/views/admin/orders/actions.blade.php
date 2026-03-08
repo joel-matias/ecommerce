@@ -12,10 +12,24 @@
             </button>
         @break
 
+        @case(\App\Enums\OrderStatus::Failed)
+            <button wire:click="markAsRefunded({{ $order->id }})" class="underline text-blue-500 hover:no-underline">
+                Marcar como devuelto
+            </button>
+        @break
+
+        @case(\App\Enums\OrderStatus::Refunded)
+            <button wire:click="assignDriver({{ $order->id }})" class="underline text-blue-500 hover:no-underline">
+                Asignar repartidor
+            </button>
+        @break
+
         @default
     @endswitch
 
-    <button class="underline text-blue-500 hover:no-underline">
-        Cancelar
-    </button>
+    @if ($order->status != \App\Enums\OrderStatus::Cancelled)
+        <button wire:click="cancelOrder({{ $order->id }})" class="underline text-blue-500 hover:no-underline">
+            Cancelar
+        </button>
+    @endif
 </div>

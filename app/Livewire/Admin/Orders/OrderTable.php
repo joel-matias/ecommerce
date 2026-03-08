@@ -3,8 +3,10 @@
 namespace App\Livewire\Admin\Orders;
 
 use App\Enums\OrderStatus;
+use App\Enums\ShipmentStatus;
 use App\Models\Driver;
 use App\Models\Order;
+use App\Models\Shipment;
 use Illuminate\Support\Facades\Storage;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
@@ -106,5 +108,41 @@ class OrderTable extends DataTableComponent
         ]);
 
         $this->reset('new_shipment');
+    }
+
+    public function markAsRefunded(Order $order)
+    {
+        $order->status = OrderStatus::Refunded;
+        $order->save();
+
+        $shipment = $order->shipment->last();
+        $shipment->refunded_at = now();
+    }
+
+    public function cancelOrder(Order $order)
+    {
+
+        if($order->status == OrderStatus::Shipped){
+            $this->dispatch('swal', [
+                'icon' => 'error',
+                'title' => 'No se puede cancelar la orden',
+                'text' => 'La orden tiene envios pendientes'
+            ]);
+
+            return;
+        }
+
+        if($order->status == OrderStatus::Failed){
+            $this->dispatch('swal', [
+                'icon' => 'error',
+                'title' => 'No se puede cancelar la orden',
+                'text' => 'La orden tiene retornado por el delivery'
+            ]);
+
+            return;
+        }
+
+        $order->status = OrderStatus::Cancelled;
+        $order->save();
     }
 }

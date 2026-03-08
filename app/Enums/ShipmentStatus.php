@@ -6,5 +6,5 @@ enum ShipmentStatus: int
 {
     case Pending = 1;
     case Completed = 2;
-    case Failde = 3;
+    case Failed = 3;
 }
