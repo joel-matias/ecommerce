@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\Order;
+use App\Models\Variant;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -103,17 +104,28 @@ class CheckoutController extends Controller
 
         if (isset($response['dataMap']) && $response['dataMap']['ACTION_CODE'] == '000') {
 
+            Cart::instance('shopping');
+
+            $content = Cart::content()->filter(function($item){
+                return $item->qty <= $item->options['stock'];
+            });
+
             $address = Address::where('user_id', Auth::id())->where('default', true)->first();
 
             Order::create([
                 'user_id' => Auth::id(),
-                'content' => Cart::instance('shopping')->content(),
+                'content' => $content,
                 'address' => $address,
                 'payment_id' => $response['dataMap']['TRANSACTION_ID'],
-                'total' => Cart::instance('shopping')->subtotal(2, '.', '') + 100,
+                'total' => $response['dataMap']['AMOUNT'],
             ]);
 
-            Cart::destroy();
+            foreach ($content as $item) {
+                Variant::where('sku', $item->options['sku'])
+                    ->decrement('stock', $item->qty);
+
+                Cart::remove($item->rowId);
+            }
 
             return redirect()->route('gracias');
         }
