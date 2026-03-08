@@ -7,6 +7,11 @@ use App\Models\Option;
 
 class FamilyController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:manage families');
+    }
+
     public function show(Family $family)
     {
         // $options = Option::whereHas('products.subcategory.category', function ($query) use ($family) {

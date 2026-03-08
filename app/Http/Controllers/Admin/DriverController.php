@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class DriverController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:manage drivers');
+    }
+
     /**
      * Display a listing of the resource.
      */
