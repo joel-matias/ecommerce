@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 class ShoppingCart extends Component
@@ -11,6 +12,16 @@ class ShoppingCart extends Component
     public function mount()
     {
         Cart::instance('shopping');
+    }
+
+    #[Computed()]
+    public function subtotal()
+    {
+        return Cart::content()->filter(function($item){
+            return $item->qty <= $item->options['stock'];
+        })->sum(function($item){
+            return $item->subtotal;
+        });
     }
 
     public function decrease($rowId)

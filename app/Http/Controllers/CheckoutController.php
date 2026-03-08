@@ -15,11 +15,25 @@ class CheckoutController extends Controller
     {
         $amount = (float) Cart::instance('shopping')->subtotal(2, '.', '') + 100;
 
+        Cart::instance('shopping');
+
+        $content = Cart::content()->filter(function($item){
+            return $item->qty <= $item->options['stock'];
+        });
+
+        $subtotal = $content->sum(function($item){
+            return $item->subtotal;
+        });
+
+        $delivery = number_format(100,2);
+
+        $total = $subtotal + $delivery;
+
         $access_token = $this->generateAccessToken();
 
-        $session_token = $this->generateSessionToken($access_token, $amount);
+        $session_token = $this->generateSessionToken($access_token, $total);
 
-        return view('checkout.index', compact('session_token', 'amount'));
+        return view('checkout.index', compact('session_token', 'amount', 'content', 'subtotal', 'delivery', 'total'));
     }
 
     public function generateAccessToken()

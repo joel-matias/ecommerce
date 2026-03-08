@@ -14,11 +14,17 @@
             <div class="card">
                 <ul class="space-y-4">
                     @forelse (Cart::content() as $item)
-                        <li class="lg:flex">
-                            <img class="w-full lg:w-36 mr-2 aspect-[16/9] object-cover object-center"
+                        <li
+                            class="lg:flex {{ $item->qty > $item->options['stock'] ? 'text-red-600' : '' }} flex items-center">
+                            <img class="w-full lg:w-36 mr-2 aspect-[4/3] object-cover object-center"
                                 src="{{ $item->options->image }}" alt="">
                             <div class="w-80">
-                                <p class="text-sm">
+                                @if ($item->qty > $item->options['stock'])
+                                    <p class="font-semibold">
+                                        Stock insuficiente
+                                    </p>
+                                @endif
+                                <p class="text-sm truncate">
                                     <a href="{{ route('products.show', $item->id) }}">
                                         {{ $item->name }}
                                     </a>
@@ -41,7 +47,8 @@
                                 <span class="inline-block w-2 text-center">
                                     {{ $item->qty }}
                                 </span>
-                                <button class="btn btn-gray" wire:click="increase('{{ $item->rowId }}')">
+                                <button class="btn btn-gray" wire:click="increase('{{ $item->rowId }}')"
+                                    @disabled($item->qty >= $item->options->stock)>
                                     +
                                 </button>
                             </div>
@@ -61,7 +68,7 @@
                         Total
                     </p>
                     <p>
-                        $ {{ Cart::subtotal() }}
+                        $ {{ $this->subtotal }}
                     </p>
                 </div>
                 <a href="{{ route('shipping.index') }}" class="btn btn-purple block w-full text-center">

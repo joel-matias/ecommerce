@@ -26,23 +26,6 @@
                                         tu compra de forma segura</p>
                                 </div>
                             </li>
-                            <li>
-                                <label class="p-4 flex items-center border-top border-gray-400">
-                                    <input type="radio" value="2" x-model="pago">
-                                    <span class="ml-2">
-                                        Deposito bancario
-                                    </span>
-                                </label>
-                                <div class="p-4 bg-gray-100 flex justify-center" x-show="pago == 2">
-                                    <div>
-                                        <p>1. Pago por depósito o transferencia bancaria</p>
-                                        <p>- NU: 912-366481231-12</p>
-                                        <p>- Razon social: Ecommerce S.A de C.V</p>
-                                        <p>- RFC: 12312312</p>
-                                        <p>Enviar el comprobante de pago a 952712567</p>
-                                    </div>
-                                </div>
-                            </li>
                         </ul>
                     </div>
                 </div>
@@ -50,7 +33,7 @@
             <div class="col-span-1">
                 <div class="lg:max-w-[40rem] py-12 px-4 lg:pl-8 sm:pr-6 lg:pr-8 mr-auto">
                     <ul class="space-y-4 mb-4">
-                        @foreach (Cart::instance('shopping')->content() as $item)
+                        @foreach ($content as $item)
                             <li class="flex items-center space-x-4">
                                 <div class="flex-shrink-0 relative">
                                     <img class="h-16 aspect-square" src="{{ $item->options->image }}" alt="">
@@ -75,14 +58,14 @@
 
                     <div class="flex justify-between">
                         <p>Subtotal</p>
-                        <p>{{ Cart::instance('shopping')->subtotal() }}</p>
+                        <p>{{ $subtotal }}</p>
                     </div>
 
                     <div class="flex justify-between">
                         <p>Precio envio
                             <i class="fas fa-info-circle" title="El precio de envio es de $100"></i>
                         </p>
-                        <p>$ 100.00</p>
+                        <p>{{ $delivery }}</p>
                     </div>
 
                     <hr class="my-3">
@@ -92,7 +75,7 @@
                             Total
                         </p>
                         <p>
-                            $ {{ number_format($amount, 2, '.', '') }}
+                            $ {{ $total }}
                         </p>
                     </div>
                     <div>
@@ -142,7 +125,7 @@
             document.addEventListener('DOMContentLoaded', function() {
 
                 let purchasenumber = Math.floor(Math.random() * 1000000000);
-                let amount = {{ $amount }}
+                let amount = {{ $total }}
 
                 VisanetCheckout.configure({
                     sessiontoken: '{{ $session_token }}',
