@@ -17,8 +17,6 @@ class DatabaseSeeder extends Seeder
         Storage::deleteDirectory('products');
         Storage::makeDirectory('products');
 
-        // User::factory(10)->create();
-
         User::factory()->create([
             'name' => 'Joel Geovanny',
             'last_name' => 'Matias Santiago',
@@ -28,8 +26,12 @@ class DatabaseSeeder extends Seeder
             'email' => 'joelsantiagos000@gmail.com',
             'password' => bcrypt('joel12san'),
         ]);
+
+        User::factory(20)->create();
+
         $this->call([
             PermissionSeeder::class,
+            RoleSeeder::class,
             FamilySedeer::class,
             OptionSeeder::class,
         ]);
