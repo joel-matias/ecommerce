@@ -33,6 +33,6 @@ class DatabaseSeeder extends Seeder
             OptionSeeder::class,
         ]);
 
-        Product::factory(1000)->create();
+        Product::factory(15)->create();
     }
 }

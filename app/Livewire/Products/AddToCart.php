@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 
+use function Laravel\Prompts\alert;
+
 class AddToCart extends Component
 {
     public $product;
@@ -18,22 +20,54 @@ class AddToCart extends Component
 
     ];
 
+    public $variant;
+
+    public $stock;
+
     public function mount()
     {
         $this->selectedFeatures = $this->product->variants->first()->features->pluck('id','option_id')->toArray();
+
+        $this->getVariant();
     }
 
-    #[Computed]
-    public function variant()
+    public function updatedSelectedFeatures($name, $value)
     {
-        return $this->product->variants->filter(function ($variant) {
+        $this->getVariant();
+    }
+
+    public function getVariant()
+    {
+        $this->variant = $this->product->variants->filter(function ($variant) {
             return ! array_diff($variant->features->pluck('id')->toArray(), $this->selectedFeatures);
         })->first();
+
+        $this->stock = $this->variant->stock;
+        $this->qty = 1;
     }
 
     public function add_to_cart()
     {
         Cart::instance('shopping');
+
+        //Sku igual al de la variante
+        $cartItem = Cart::search(function($cartItem,$rowId){
+            return $cartItem->options->sku === $this->variant->sku;
+        })->first();
+
+
+        if ($cartItem) {
+            $stock = $this->stock - $cartItem->qty;
+            if ($stock < $this->qty) {
+                $this->dispatch('swal', [
+                    'icon' => 'error',
+                    'title' => 'No hay duficiente stock',
+                    'content' => 'No hay sufuciente stock para agregarlo al carrito'
+                ]);
+
+                return;
+            }
+        }
 
         Cart::add([
             'id' => $this->product->id,
@@ -43,6 +77,7 @@ class AddToCart extends Component
             'options' => [
                 'image' => $this->product->image,
                 'sku' => $this->variant->sku,
+                'stock' => $this->variant->stock,
                 'features' => Feature::whereIn('id', $this->selectedFeatures)
                     ->pluck('description', 'id')->toArray(),
             ],
