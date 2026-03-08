@@ -81,38 +81,39 @@
         </div>
     </section>
 
-    @if ($product->variants->count())
-        <section class="roudend-lg border border-gray-100 bg-white shadow-lg mt-12">
-            <header class="border-b border-gray-200 px-6 py-2">
-                <div class="flex justify-between">
-                    <h1 class="text-lg font-semibold text-gray-700">
-                        Variantes
-                    </h1>
-                </div>
-            </header>
-            <div class="p-6">
-                <ul class="divide-y -my-4">
-                    @foreach ($product->variants as $item)
-                        <li class="py-4 flex items-center">
-                            <img src="{{ $item->image }}" class="w-12 h-12 object-cover object-center ">
-                            <p class="divide-x">
-                                @foreach ($item->features as $feature)
-                                    <span class="px-3">
-                                        {{ $feature->description }}
-                                    </span>
-                                @endforeach
-                            </p>
-
-                            <a href="{{ route('admin.products.variants', [$product, $item]) }}"
-                                class="ml-auto btn btn-blue">
-                                Editar
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
+    <section class="roudend-lg border border-gray-100 bg-white shadow-lg mt-12">
+        <header class="border-b border-gray-200 px-6 py-2">
+            <div class="flex justify-between">
+                <h1 class="text-lg font-semibold text-gray-700">
+                    Variantes
+                </h1>
             </div>
-        </section>
-    @endif
+        </header>
+        <div class="p-6">
+            <ul class="divide-y -my-4">
+                @foreach ($product->variants as $item)
+                    <li class="py-4 flex items-center">
+                        <img src="{{ $item->image }}" class="w-12 h-12 object-cover object-center ">
+                        <p class="divide-x">
+                            @forelse ($item->features as $feature)
+                                <span class="px-3">
+                                    {{ $feature->description }}
+                                </span>
+                            @empty
+                                <span class="px-3">
+                                    Variante principal
+                                </span>
+                            @endforelse
+                        </p>
+
+                        <button wire:click="editVariant({{ $item->id }})" class="ml-auto btn btn-blue">
+                            Editar
+                        </button>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    </section>
 
     <x-dialog-modal wire:model="openModal">
         <x-slot name="title">
@@ -199,6 +200,40 @@
                 Guardar
             </x-button>
 
+        </x-slot>
+    </x-dialog-modal>
+
+    {{-- modal editar variante --}}
+    <x-dialog-modal wire:model="variantEdit.open">
+        <x-slot name="title">
+            Editar variante
+        </x-slot>
+
+        <x-slot name="content">
+            <div class="mb-4">
+                <x-label>
+                    SKU
+                </x-label>
+                <x-input wire:model="variantEdit.sku" class="w-full" />
+                <x-validation-errors for="variantEdit.sku" />
+            </div>
+
+            <div>
+                <x-label>
+                    Stock
+                </x-label>
+                <x-input wire:model="variantEdit.stock" class="w-full" />
+                <x-validation-errors for="variantEdit.stock" />
+            </div>
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-danger-button x-on:click="show = false">
+                Cancelar
+            </x-danger-button>
+            <x-button class="ml-2" wire:click="updateVariant">
+                Guardar
+            </x-button>
         </x-slot>
     </x-dialog-modal>
 

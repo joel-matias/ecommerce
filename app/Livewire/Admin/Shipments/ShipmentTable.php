@@ -48,7 +48,7 @@ class ShipmentTable extends DataTableComponent
         return [
             SelectFilter::make('status')
                 ->options([
-                    'Todos',
+                    ''=> 'Todos',
                     1 => 'Pendiente',
                     2 => 'Completado',
                     3 => 'Fallido'

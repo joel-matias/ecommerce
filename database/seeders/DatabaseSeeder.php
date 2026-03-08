@@ -4,14 +4,11 @@ namespace Database\Seeders;
 
 use App\Models\Product;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
      * Seed the application's database.
      */
@@ -36,6 +33,6 @@ class DatabaseSeeder extends Seeder
             OptionSeeder::class,
         ]);
 
-        Product::factory(500)->create();
+        Product::factory(1000)->create();
     }
 }

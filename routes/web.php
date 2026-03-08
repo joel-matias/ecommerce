@@ -22,13 +22,12 @@ Route::get('products/{product}', [ProductController::class, 'show'])->name('prod
 
 Route::get('cart', [CartController::class, 'index'])->name('cart.index');
 
-Route::get('shipping', [ShippingController::class, 'index'])->name('shipping.index');
-
-Route::get('checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-
-Route::post('checkout/paid', [CheckoutController::class, 'paid'])->name('checkout.paid');
-
-Route::view('gracias', 'gracias')->name('gracias');
+Route::middleware('auth')->group(function () {
+    Route::get('shipping', [ShippingController::class, 'index'])->name('shipping.index');
+    Route::get('checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('checkout/paid', [CheckoutController::class, 'paid'])->name('checkout.paid');
+    Route::view('gracias', 'gracias')->name('gracias');
+});
 
 Route::middleware([
     'auth:sanctum',
