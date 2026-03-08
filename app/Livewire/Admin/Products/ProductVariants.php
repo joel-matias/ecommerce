@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Products;
 use App\Models\Feature;
 use App\Models\Option;
 use App\Models\Variant;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 
@@ -34,6 +35,35 @@ class ProductVariants extends Component
         'sku' => null
     ];
 
+    public $newFeature = [
+        // $option->id => $feature->id
+    ];
+
+    public function addNewFeature($option_id)
+    {
+        $this->validate([
+            'newFeature.' . $option_id => 'required'
+        ]);
+
+        $feature = Feature::find($this->newFeature[$option_id]);
+
+        $this->product->options()->updateExistingPivot($option_id, [
+            'features' => array_merge($this->product->options->find($option_id)->pivot->features,[
+                [
+                    'id' => $feature->id,
+                    'value' => $feature->value,
+                    'description' => $feature->description
+                ]
+            ])
+        ]);
+
+        $this->product = $this->product->fresh();
+
+        $this->newFeature[$option_id] = '';
+
+        $this->generarVariantes();
+    }
+
     #[Computed()]
     public function options()
     {
@@ -57,6 +87,21 @@ class ProductVariants extends Component
     public function features()
     {
         return Feature::where('option_id', $this->variant['option_id'])->get();
+    }
+
+    public function getFeatures($option_id)
+    {
+        $features = DB::table('option_product')
+            ->where('product_id', $this->product->id)
+            ->where('option_id', $option_id)
+            ->first()
+            ->features;
+
+        $features = collect(json_decode($features))->pluck('id')->toArray();
+
+        return Feature::where('option_id', $option_id)
+            ->whereNotIn('id', $features)
+            ->get();
     }
 
     public function addFeature()
@@ -144,6 +189,20 @@ class ProductVariants extends Component
         $combinaciones = $this->generarCombinaciones($features);
 
         foreach ($combinaciones as $combinacion) {
+            $variant = Variant::where('product_id', $this->product->id)
+            ->has('features', count($combinacion))
+            ->whereHas('features', function ($query) use ($combinacion) {
+                $query->whereIn('feature_id', $combinacion);
+            })
+            ->whereDoesntHave('features', function ($query) use ($combinacion) {
+                $query->whereNotIn('feature_id', $combinacion);
+            })
+            ->first();
+
+            if ($variant) {
+                continue;
+            }
+
             $variant = Variant::create([
                 'product_id' => $this->product->id,
             ]);
