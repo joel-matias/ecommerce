@@ -392,8 +392,8 @@ Suggested format (optional):
 
 - Name: `Joel`
 - Role: `Full Stack Developer`
-- Email: `your-email@example.com`
-- LinkedIn/GitHub: `your-profile-url`
+- Email: `joelsantiagos001@gmail.com`
+- LinkedIn/GitHub: `https://linkedin.com/in/joel-ms`
 
 ## License
 
