@@ -388,8 +388,6 @@ Main failing points:
 
 Maintained by **Joel**.
 
-Suggested format (optional):
-
 - Name: `Joel`
 - Role: `Full Stack Developer`
 - Email: `joelsantiagos001@gmail.com`
